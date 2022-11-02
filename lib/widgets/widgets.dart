@@ -1,0 +1,1 @@
+export 'package:moviemania/widgets/drawer_nav.dart';
