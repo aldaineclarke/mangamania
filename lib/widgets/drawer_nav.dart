@@ -51,6 +51,9 @@ class DrawerNavigation extends StatelessWidget {
                       ),TextButton(
                         onPressed: ()=> Navigator.pushNamed(context, "/settings"),
                         child: Text("Settings", style: setStyleIfActive(context, "/settings")),
+                      ),TextButton(
+                        onPressed: ()=> Navigator.pushNamed(context, "/login"),
+                        child: Text("Logout", style: setStyleIfActive(context, "/login")),
                       ),
                     ],
                   ),
