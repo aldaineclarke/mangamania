@@ -40,6 +40,9 @@ class DrawerNavigation extends StatelessWidget {
                         onPressed: ()=> Navigator.pushNamed(context, "/home"),
                         child: Text("Movies", style: setStyleIfActive(context, "/home")),
                       ),TextButton(
+                        onPressed: ()=> Navigator.pushNamed(context, "/customMovie"),
+                        child: Text("Custom Movies", style: setStyleIfActive(context, "/customMovie")),
+                      ),TextButton(
                         onPressed: ()=> Navigator.pushNamed(context, "/favorite"),
                         child: Text("Favorites",style: setStyleIfActive(context, "/favorite")),
                       ),TextButton(

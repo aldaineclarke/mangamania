@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:moviemania/utilities/colors.dart';
+import 'package:moviemania/widgets/widgets.dart';
 
 class MovieScreen extends StatelessWidget {
   const MovieScreen({Key? key}) : super(key: key);
@@ -241,28 +242,7 @@ class MovieScreen extends StatelessWidget {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  OutlinedButton(
-                                      style: OutlinedButton.styleFrom(
-
-                                        shape:RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(30.0),
-                                          // side:
-                                        ),
-                                        side: BorderSide( width: 2.0, color: AppColors.textColor, style: BorderStyle.solid),
-                                        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
-
-                                      ),
-                                      onPressed: ()=> null,
-                                      child: Row(
-                                        children: [
-                                          Icon(Icons.play_arrow, color: AppColors.textColor,size: 32),
-                                          Text(
-                                            "Play Now",
-                                            style: TextStyle(fontSize: 12, color: AppColors.textColor, fontWeight: FontWeight.bold),
-                                          )
-                                        ],
-                                      )
-                                  ),
+                                  CustomOutlineButton(),
                                   ElevatedButton(
                                       style: ElevatedButton.styleFrom(
 
@@ -298,3 +278,4 @@ class MovieScreen extends StatelessWidget {
     );
   }
 }
+
