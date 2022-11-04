@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moviemania/screens/createCustomMovieScreen.dart';
 import 'package:moviemania/screens/customMovieHomeScreen.dart';
 import 'package:moviemania/screens/homeScreen.dart';
 import 'package:moviemania/screens/loginScreen.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/home": (context)=> const HomeScreen(),
         "/customMovie": (context)=> const CustomMovieHomeScreen(),
+        "/createCustomMovie": (context)=> const CustomMovieCreationScreen(),
         "/movie": (context)=> const MovieScreen(),
         "/login": (context)=> const LoginPage()
       },
