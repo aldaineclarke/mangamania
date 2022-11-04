@@ -6,11 +6,11 @@ class Movie{
   final List<Map<String, dynamic>> genres;
   final String homepage;
   final int id;
-  final String imdb_id ;
+  final String? imdb_id ;
   final String original_language;
   final String original_title;
   final String overview;
-  final int popularity;
+  final double popularity;
   final String poster_path;
   final List<Map<String, dynamic>> production_companies;
   final List<Map<String, dynamic>> production_countries;
@@ -36,7 +36,7 @@ class Movie{
     this.original_language="",
     this.original_title = "",
     this.overview = "",
-    this.popularity= 0,
+    this.popularity= 0.0,
     this.poster_path = "",
     this.production_companies = const[],
     this.production_countries = const[],
@@ -79,6 +79,24 @@ class Movie{
       vote_count: json["vote_count"],
 
     );
+  }
+  factory Movie.shortFromJson(Map<String, dynamic> json){
+    return Movie(
+      adult: json["adult"],
+      backdrop_path: json["backdrop_path"],
+      id: json["id"],
+      original_language:json["original_language"],
+      original_title: json["original_title"],
+      overview: json["overview"],
+      popularity: json["popularity"],
+      poster_path: json["poster_path"],
+      release_date: json["release_date"],
+      title: json["title"],
+      vote_average: json["vote_average"],
+      vote_count: json["vote_count"],
+
+    );
+
   }
 }
 
