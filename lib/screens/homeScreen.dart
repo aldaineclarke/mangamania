@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           },
         )
-    )));
+    )),floatingIconButton: null,);
   }
 
 

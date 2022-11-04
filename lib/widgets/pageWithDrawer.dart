@@ -5,9 +5,11 @@ class PageWithDrawer extends StatelessWidget {
   const PageWithDrawer({
     Key? key,
     required this.body,
+    required this.floatingIconButton
   }) : super(key: key);
 
   final body;
+  final floatingIconButton;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,7 @@ class PageWithDrawer extends StatelessWidget {
 
         child: DrawerNavigation(),
       ),
+      floatingActionButton:floatingIconButton
     );
   }
 }
