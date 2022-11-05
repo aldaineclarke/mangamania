@@ -10,7 +10,7 @@ class NetworkHandler {
   static final client = http.Client();
   static final Map<String, String> _headers ={
     "Content-type": "application/json",
-    "Authorization": "Bearer $token"
+    "authorization": "Bearer $token"
   };
 
   // Don't really need a constructor, as we are not instantiating the Helper class
@@ -35,6 +35,26 @@ class NetworkHandler {
     // want to facilitate if the response is 201, like when creating an entity
     return _handleResponse(response);
 
+  }
+
+  static Future <String> postMultipart(String endpoint, Map<String, String> body, List<Map<String, dynamic>> streams) async{
+    token = await getToken("jwt-auth");
+    http.MultipartRequest request = http.MultipartRequest("POST",buildUrl(segment: endpoint));
+    request.headers.addAll(_headers);
+    var multipartFileList = streams.map((element) {
+      File _file = File(element["data"].path);
+      return http.MultipartFile(element["field"], _file.readAsBytes().asStream(),_file.lengthSync(), filename: _file.path.split('/').last );
+    });
+    request.files.addAll(multipartFileList);
+    request.fields.addAll(body);
+
+    http.StreamedResponse response = await request.send();
+    var streamToString = await response.stream.bytesToString();
+    if(response.statusCode == 200 || response.statusCode == 201){
+      return streamToString;
+    }else{
+      throw Exception(jsonDecode(streamToString)["error"]);
+    }
   }
 
   static Future<String> get({String endpoint = "", Object queryParams = ""}) async {
