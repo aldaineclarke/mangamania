@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   },
                                   child: Image(image: NetworkImage(
                                       "https://image.tmdb.org/t/p/original/" +
-                                          snapshot.data![index].backdrop_path),fit: BoxFit.cover,
+                                          snapshot.data![index].backdrop_path!),fit: BoxFit.cover,
                                   ),
                                 ),
                                 Padding(
@@ -94,9 +94,34 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
 
                   ),
+                  Container(
+                      height: MediaQuery.of(context).size.height * 0.20,
+                      child: Column(
+                      children: [
+                        Text("Comedies"),
+                        Expanded(
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              physics: BouncingScrollPhysics(),
+                              itemCount: 5 ,
+                              itemBuilder: (context, index){
+                                return Container(
+                                  width: MediaQuery.of(context).size.width * 0.28,
+
+                                child:Image(image: NetworkImage("https://image.tmdb.org/t/p/original/" +
+                                      snapshot.data![index].poster_path), fit: BoxFit.contain,),
+                                );
+                              }
+                          ),
+                        )
+                      ],
+                    )
+                  )
                 ],
               );
             }else{
+              print(snapshot.hasError);
+              print(snapshot.error);
               return CircularProgressIndicator();
             }
           },
