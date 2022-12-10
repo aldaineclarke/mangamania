@@ -15,15 +15,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<Movie>> TMDBMovies;
+  late Future<Map<String, List<Movie>>> TMDBMovies;
 
-  Future<List<Movie>> getAllTMDBMovies() async{
+  Future<Map<String, List<Movie>>> getAllTMDBMovies() async{
     Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint: "/tmdb_movies"));
-    List results = response["data"]["results"];
-    List<Movie> movies = results.map((movie_data){
-      return Movie.shortFromJson(movie_data);
-    }).toList();
-    return movies;
+    Map<String, dynamic> data = response["data"];
+    Map<String, List<Movie>> movieLists = Map();
+    data.forEach((key, value){
+     List<Movie> movies = (value as List).map((e) => Movie.shortFromJson(e)).toList();
+      movieLists.addAll({key:movies});
+    });
+    return movieLists;
+
   }
 
   @override
@@ -34,17 +37,19 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return PageWithDrawer(body: Center(child:Container(
-        child: FutureBuilder<List<Movie>>(
+        child: FutureBuilder<Map<String, List<Movie>>>(
           future: TMDBMovies,
           builder: (context, snapshot){
             if(snapshot.hasData){
+              List<Movie> popularMovies = snapshot.data!["popular"]!;
+
               return ListView(
                 children: [
                   Container(
                     height: MediaQuery.of(context).size.height * 0.32,
                     child: PageView.builder(
                         padEnds: false,
-                        itemCount: 5,
+                        itemCount: popularMovies.length,
                         physics: BouncingScrollPhysics(),
                         controller: PageController(viewportFraction: 1),
                         itemBuilder: (context, index) {
@@ -62,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   },
                                   child: Image(image: NetworkImage(
                                       "https://image.tmdb.org/t/p/original/" +
-                                          snapshot.data![index].backdrop_path!),fit: BoxFit.cover,
+                                          popularMovies[index].backdrop_path!),fit: BoxFit.cover,
                                   ),
                                 ),
                                 Padding(
@@ -71,8 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children:[
-                                        Text(textLimiter(text:snapshot.data![index].title, limit:30), style: TextStyle(fontSize: 18, color: AppColors.titleColor, fontWeight: FontWeight.bold),),
-                                        Text(textLimiter(text: snapshot.data![index].overview, limit:120), style: TextStyle(fontSize: 12, color: AppColors.titleColor),),
+                                        Text(textLimiter(text:popularMovies[index].title, limit:30), style: TextStyle(fontSize: 18, color: AppColors.titleColor, fontWeight: FontWeight.bold),),
+                                        Text(textLimiter(text: popularMovies[index].overview, limit:120), style: TextStyle(fontSize: 12, color: AppColors.titleColor),),
                                         SizedBox(height :5),
                                         FittedBox(
                                           alignment: Alignment.center,
@@ -94,28 +99,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
 
                   ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: displayMoviesByGenres(context, snapshot.data!),
+                  ),
                   Container(
-                      height: MediaQuery.of(context).size.height * 0.20,
-                      child: Column(
-                      children: [
-                        Text("Comedies"),
-                        Expanded(
-                          child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              physics: BouncingScrollPhysics(),
-                              itemCount: 5 ,
-                              itemBuilder: (context, index){
-                                return Container(
-                                  width: MediaQuery.of(context).size.width * 0.28,
+                    padding: EdgeInsets.all(10),
+                    alignment: Alignment.center,
+                    child:
+                      Text("Copyright ${DateTime.now().year}",style: TextStyle(color:AppColors.textColor.withOpacity(0.5)),)
 
-                                child:Image(image: NetworkImage("https://image.tmdb.org/t/p/original/" +
-                                      snapshot.data![index].poster_path), fit: BoxFit.contain,),
-                                );
-                              }
-                          ),
-                        )
-                      ],
-                    )
                   )
                 ],
               );
@@ -131,6 +124,37 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
 }
+
+List<Widget> displayMoviesByGenres(BuildContext context, Map<String, List<Movie>> movieData){
+
+  List<Widget> widgets = [];
+  movieData.forEach((key,  movies){
+      if(key == "popular") return;
+      widgets.add(Container(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          child:Text(key.replaceFirst(key[0], key[0].toUpperCase()),
+              style: TextStyle(color: AppColors.titleColor, fontWeight: FontWeight.w500, fontSize: 18),
+          )));
+      widgets.add(Container(
+        height:MediaQuery.of(context).size.height * 0.22,
+        child:ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: movies.length,
+            itemBuilder: (context, index){
+              return Container(
+                width: MediaQuery.of(context).size.width * 0.35,
+                child: Image(
+                  image: NetworkImage(
+                      "https://image.tmdb.org/t/p/original/" +
+                          movies[index].poster_path!), fit: BoxFit.contain)
+              );
+            }
+        )
+      ));
+  });
+  return widgets;
+}
+
 
 
 
