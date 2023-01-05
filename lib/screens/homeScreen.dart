@@ -65,7 +65,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                         tileMode: TileMode.mirror
                                     ).createShader(rect);
                                   },
-                                  child: Image(image: NetworkImage(
+                                  child: Image(
+                                    loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress){
+                                      if(loadingProgress == null) {return child;}
+                                      return Container(
+                                        decoration:  BoxDecoration(
+                                            border: Border.all(color:Colors.indigo),
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: AssetImage("assets/loading_img.jpg")
+                                            )
+                                        ),
+                                      );
+                                    },
+
+                                    image: NetworkImage(
                                       "https://image.tmdb.org/t/p/original/" +
                                           popularMovies[index].backdrop_path!),fit: BoxFit.cover,
                                   ),
@@ -113,8 +127,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               );
             }else{
-              print(snapshot.hasError);
-              print(snapshot.error);
               return CircularProgressIndicator();
             }
           },
@@ -142,8 +154,22 @@ List<Widget> displayMoviesByGenres(BuildContext context, Map<String, List<Movie>
             itemCount: movies.length,
             itemBuilder: (context, index){
               return Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 width: MediaQuery.of(context).size.width * 0.35,
                 child: Image(
+                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress){
+                    if(loadingProgress == null) {return child;}
+                    return Container(
+                        decoration:  BoxDecoration(
+                          border: Border.all(color:Colors.indigo),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage("assets/loading_img.jpg")
+                          )
+                        ),
+
+                    );
+                  },
                   image: NetworkImage(
                       "https://image.tmdb.org/t/p/original/" +
                           movies[index].poster_path!), fit: BoxFit.contain)
@@ -155,6 +181,19 @@ List<Widget> displayMoviesByGenres(BuildContext context, Map<String, List<Movie>
   return widgets;
 }
 
+
+class _SlidingGradientTransform extends GradientTransform {
+  const _SlidingGradientTransform({
+    required this.slidePercent,
+  });
+
+  final double slidePercent;
+
+  @override
+  Matrix4? transform(Rect bounds, {TextDirection? textDirection}) {
+    return Matrix4.translationValues(bounds.width * slidePercent, 0.0, 0.0);
+  }
+}
 
 
 
