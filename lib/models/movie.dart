@@ -2,7 +2,7 @@ class Movie{
   final bool adult;
   final String? backdrop_path;
   final Map<String, dynamic> belongs_to_collection;
-  final int budget;
+  final num budget;
   final List<Map<String, dynamic>> genres;
   final String homepage;
   final int id;
@@ -10,18 +10,18 @@ class Movie{
   final String original_language;
   final String original_title;
   final String overview;
-  final double popularity;
+  final num popularity;
   final String poster_path;
   final List<Map<String, dynamic>> production_companies;
   final List<Map<String, dynamic>> production_countries;
   final String release_date;
-  final int revenue;
-  final int runtime;
+  final num revenue;
+  final num runtime;
   final List<Map<String, dynamic>> spoken_languages;
   final String status;
   final String title;
   final num vote_average;
-  final int vote_count;
+  final num vote_count;
   final Map videos;
 
   Movie({
