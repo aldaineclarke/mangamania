@@ -3,7 +3,7 @@ class Movie{
   final String? backdrop_path;
   final Map<String, dynamic> belongs_to_collection;
   final num budget;
-  final List<Map<String, dynamic>> genres;
+  final List<String> genres;
   final String homepage;
   final int id;
   final String? imdb_id ;
@@ -12,12 +12,12 @@ class Movie{
   final String overview;
   final num popularity;
   final String poster_path;
-  final List<Map<String, dynamic>> production_companies;
-  final List<Map<String, dynamic>> production_countries;
+  final List<dynamic> production_companies;
+  final List<dynamic> production_countries;
   final String release_date;
   final num revenue;
   final num runtime;
-  final List<Map<String, dynamic>> spoken_languages;
+  final List<dynamic> spoken_languages;
   final String status;
   final String title;
   final num vote_average;
@@ -52,13 +52,16 @@ class Movie{
 });
 
   factory Movie.fromJson(Map<String, dynamic> json){
+    print(json["genres"]);
+    List<String> genresList = (json["genres"] as List).map((e) => e["name"] as String).toList();
+    print(genresList.runtimeType);
     return Movie(
       adult: json["adult"],
       imdb_id: json["imdb_id"],
       backdrop_path: json["backdrop_path"],
-      belongs_to_collection: json["belongs_to_collection"],
+      belongs_to_collection: json["belongs_to_collection"] ?? {},
       budget: json["budget"],
-      genres: json["genres"],
+      genres: genresList,
       homepage: json["homepage"],
       id: json["id"],
       original_language:json["original_language"],

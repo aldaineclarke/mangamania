@@ -127,6 +127,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               );
             }else{
+              if(snapshot.hasError){
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${snapshot.error}")));
+              }
               return CircularProgressIndicator();
             }
           },
@@ -153,7 +156,11 @@ List<Widget> displayMoviesByGenres(BuildContext context, Map<String, List<Movie>
             scrollDirection: Axis.horizontal,
             itemCount: movies.length,
             itemBuilder: (context, index){
-              return Container(
+              return InkWell(
+                  onTap: (){
+                    Navigator.pushNamed(context,"/movie",arguments: movies[index]);
+                  },
+                  child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 width: MediaQuery.of(context).size.width * 0.35,
                 child: Image(
@@ -173,7 +180,7 @@ List<Widget> displayMoviesByGenres(BuildContext context, Map<String, List<Movie>
                   image: NetworkImage(
                       "https://image.tmdb.org/t/p/original/" +
                           movies[index].poster_path!), fit: BoxFit.contain)
-              );
+              ),);
             }
         )
       ));
